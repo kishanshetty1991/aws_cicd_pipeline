@@ -9,7 +9,12 @@ export class CdkCicdStack extends cdk.Stack {
     new CodePipeline(this, 'AwesomePipeline', {
       pipelineName: 'AwesomePipeline',
       synth: new ShellStep('Synth', {
-        input: CodePipelineSource.gitHub('kishanshetty1991/aws_cicd_pipeline', 'cicd-practice'),
+        input: CodePipelineSource.gitHub('kishanshetty1991/aws_cicd_pipeline', 'cicd-practice', {
+          authentication: cdk.SecretValue.secretsManager(
+            'github-token',
+            { jsonField: 'github-token' }
+          )
+        }),
         commands: [
           'npm ci',
           'npx cdk synth',
